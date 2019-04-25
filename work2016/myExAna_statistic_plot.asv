@@ -1,0 +1,137 @@
+clear
+clc
+clf
+warning off;
+
+path = 'D:\myWork\work2015\';
+dataName = 'cornell'; 
+%%%flower17; flower102; CCV; caltech101_numofbasekernel_10; bbcsport2view
+%% %% %% washington; wisconsin; texas; cornell; caltech101_nTrain25_48
+
+epsionset = [0.1:0.1:0.9];
+len = length(epsionset) ;
+qnorm = 2;
+numofalg = 9;
+maxIter = 50;
+res_acc_mean = zeros(len,numofalg);
+res_nmi_mean = zeros(len,numofalg);
+res_pur_mean = zeros(len,numofalg);
+aln_sco_mean = zeros(len,numofalg-1);
+for ie =1:len
+    res_acc_10 = zeros(maxIter,numofalg);
+    res_nmi_10 = zeros(maxIter,numofalg);
+    res_pur_10 = zeros(maxIter,numofalg);
+    aln_sco_10 = zeros(maxIter,numofalg-1);
+    for iter =1:maxIter
+        load([path,'work2016\webKB\',dataName,'_missingRatio_',num2str(epsionset(ie)),'_norm_',num2str(qnorm),...
+            '_clustering_iter_',num2str(iter),'.mat'],'res','alignment','res_gnd');
+        indx1 = setdiff(1:10,4);
+        indx2 = setdiff(1:9,4);
+        res_acc_10(iter,:) =  res(1,indx1);
+        res_nmi_10(iter,:) =  res(2,indx1);
+        res_pur_10(iter,:) =  res(3,indx1);
+        aln_sco_10(iter,:) =  alignment(indx2);
+    end
+    res_acc_mean(ie,:) = mean(res_acc_10);
+    res_nmi_mean(ie,:) = mean(res_nmi_10);
+    res_pur_mean(ie,:) = mean(res_pur_10);
+    aln_sco_mean(ie,:) = mean(aln_sco_10);
+end
+indx0 = [1:4 9 5:8];
+res_acc_mean = res_acc_mean(:,indx0);
+res_nmi_mean = res_nmi_mean(:,indx0);
+res_pur_mean = res_pur_mean(:,indx0);
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+figure(1);
+H1 = plot(epsionset,res_acc_mean(:,1),'-.k^',epsionset,res_acc_mean(:,2),'-.bo',epsionset,res_acc_mean(:,3),'-.mo',...
+    epsionset,res_acc_mean(:,4),'-.c^',epsionset,res_acc_mean(:,5),'-gs',epsionset,res_acc_mean(:,6),'-rs',...
+    epsionset,res_acc_mean(:,7),'-gh',epsionset,res_acc_mean(:,8),'-bd',epsionset,res_acc_mean(:,9),'-r*');
+set(H1(1),'LineWidth',2, 'MarkerEdgeColor','k', 'MarkerFaceColor','k', 'MarkerSize',8)
+set(H1(2),'LineWidth',2, 'MarkerEdgeColor','b', 'MarkerFaceColor','b', 'MarkerSize',8)
+set(H1(3),'LineWidth',2, 'MarkerEdgeColor','m', 'MarkerFaceColor','m', 'MarkerSize',8)
+set(H1(4),'LineWidth',2, 'MarkerEdgeColor','c', 'MarkerFaceColor','c', 'MarkerSize',8)
+set(H1(5),'LineWidth',2, 'MarkerEdgeColor','g', 'MarkerFaceColor','g', 'MarkerSize',8)
+set(H1(6),'LineWidth',2, 'MarkerEdgeColor','r', 'MarkerFaceColor','r', 'MarkerSize',8)
+set(H1(7),'LineWidth',2, 'MarkerEdgeColor','g', 'MarkerFaceColor','g', 'MarkerSize',8)
+set(H1(8),'LineWidth',2, 'MarkerEdgeColor','b', 'MarkerFaceColor','b', 'MarkerSize',8)
+set(H1(9),'LineWidth',2, 'MarkerEdgeColor','r', 'MarkerFaceColor','r', 'MarkerSize',8)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+xlabel('missing ratio','FontSize',20)
+ylabel('ACC','FontSize',20)
+title('Cornell','FontSize',20);
+ylim([min(min(res_acc_mean))-0.002 max(max(res_acc_mean))+0.002]);
+grid on;
+
+figure(2);
+H2 = plot(epsionset,res_nmi_mean(:,1),'-.k^',epsionset,res_nmi_mean(:,2),'-.bo',epsionset,res_nmi_mean(:,3),'-.mo',...
+    epsionset,res_nmi_mean(:,4),'-.c^',epsionset,res_nmi_mean(:,5),'-gs',epsionset,res_nmi_mean(:,6),'-rs',...
+    epsionset,res_nmi_mean(:,7),'-gh',epsionset,res_nmi_mean(:,8),'-bd',epsionset,res_nmi_mean(:,9),'-r*');
+set(H2(1),'LineWidth',2, 'MarkerEdgeColor','k', 'MarkerFaceColor','k', 'MarkerSize',8)
+set(H2(2),'LineWidth',2, 'MarkerEdgeColor','b', 'MarkerFaceColor','b', 'MarkerSize',8)
+set(H2(3),'LineWidth',2, 'MarkerEdgeColor','m', 'MarkerFaceColor','m', 'MarkerSize',8)
+set(H2(4),'LineWidth',2, 'MarkerEdgeColor','c', 'MarkerFaceColor','c', 'MarkerSize',8)
+set(H2(5),'LineWidth',2, 'MarkerEdgeColor','g', 'MarkerFaceColor','g', 'MarkerSize',8)
+set(H2(6),'LineWidth',2, 'MarkerEdgeColor','r', 'MarkerFaceColor','r', 'MarkerSize',8)
+set(H2(7),'LineWidth',2, 'MarkerEdgeColor','g', 'MarkerFaceColor','g', 'MarkerSize',8)
+set(H2(8),'LineWidth',2, 'MarkerEdgeColor','b', 'MarkerFaceColor','b', 'MarkerSize',8)
+set(H2(9),'LineWidth',2, 'MarkerEdgeColor','r', 'MarkerFaceColor','r', 'MarkerSize',8)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+xlabel('missing ratio','FontSize',20)
+ylabel('ACC','FontSize',20)
+title('Cornell','FontSize',20);
+ylim([min(min(res_acc_mean))-0.002 max(max(res_acc_mean))+0.002]);
+grid on;
+
+% 
+% % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+figure(3);
+plot(epsionset,res_pur_mean(:,1),'-.k^','LineWidth',2, 'MarkerEdgeColor','k', 'MarkerFaceColor','k', 'MarkerSize',10);
+hold on
+plot(epsionset,res_pur_mean(:,2),'-.bo','LineWidth',2, 'MarkerEdgeColor','b', 'MarkerFaceColor','b', 'MarkerSize',10);
+hold on
+plot(epsionset,res_pur_mean(:,3),'-.mo','LineWidth',2, 'MarkerEdgeColor','m', 'MarkerFaceColor','m', 'MarkerSize',10);
+hold on
+plot(epsionset,res_pur_mean(:,4),'-.c^','LineWidth',2, 'MarkerEdgeColor','c', 'MarkerFaceColor','c', 'MarkerSize',10);
+hold on
+plot(epsionset,res_pur_mean(:,5),'-gs','LineWidth',2, 'MarkerEdgeColor','g', 'MarkerFaceColor','g', 'MarkerSize',10);
+hold on
+plot(epsionset,res_pur_mean(:,6),'-rp','LineWidth',2, 'MarkerEdgeColor','r', 'MarkerFaceColor','r', 'MarkerSize',10);
+hold on
+plot(epsionset,res_pur_mean(:,7),'-gh','LineWidth',2, 'MarkerEdgeColor','g', 'MarkerFaceColor','g', 'MarkerSize',10);
+hold on
+plot(epsionset,res_pur_mean(:,8),'-bd','LineWidth',2, 'MarkerEdgeColor','b', 'MarkerFaceColor','b', 'MarkerSize',10);
+hold on
+plot(epsionset,res_pur_mean(:,9),'-r*','LineWidth',2, 'MarkerEdgeColor','r', 'MarkerFaceColor','r', 'MarkerSize',10);
+hold on
+title('\fontsize{20}{Cornell}');
+xlabel('\fontsize{20}{missing ratio}');
+ylabel('\fontsize{20}{Purity}');
+ylim([min(min(res_pur_mean))-0.003, max(max(res_pur_mean))+0.002]);
+legend('\fontsize{12}{ZF+MKKM}','\fontsize{12}{MF+MKKM}','\fontsize{12}{KNN+MKKM}','\fontsize{12}{AF+MKKM}',...
+    '\fontsize{12}{PVC}','\fontsize{12}{proposed(ZF)}','\fontsize{12}{proposed(MF)}','\fontsize{12}{proposed(KNN)}',...
+    '\fontsize{12}{proposed V2}');
+% % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+figure(4);
+plot(epsionset,aln_sco_mean(:,1),'-.k^','LineWidth',2, 'MarkerEdgeColor','k', 'MarkerFaceColor','k', 'MarkerSize',10);
+hold on
+plot(epsionset,aln_sco_mean(:,2),'-.bo','LineWidth',2, 'MarkerEdgeColor','b', 'MarkerFaceColor','b', 'MarkerSize',10);
+hold on
+plot(epsionset,aln_sco_mean(:,3),'-.mo','LineWidth',2, 'MarkerEdgeColor','m', 'MarkerFaceColor','m', 'MarkerSize',10);
+hold on
+plot(epsionset,aln_sco_mean(:,4),'-.c^','LineWidth',2, 'MarkerEdgeColor','c', 'MarkerFaceColor','c', 'MarkerSize',10);
+hold on
+plot(epsionset,aln_sco_mean(:,5),'-gs','LineWidth',2, 'MarkerEdgeColor','g', 'MarkerFaceColor','g', 'MarkerSize',10);
+hold on
+plot(epsionset,aln_sco_mean(:,6),'-rp','LineWidth',2, 'MarkerEdgeColor','r', 'MarkerFaceColor','r', 'MarkerSize',10);
+hold on
+plot(epsionset,aln_sco_mean(:,7),'-gh','LineWidth',2, 'MarkerEdgeColor','g', 'MarkerFaceColor','g', 'MarkerSize',10);
+hold on
+plot(epsionset,aln_sco_mean(:,8),'-bd','LineWidth',2, 'MarkerEdgeColor','b', 'MarkerFaceColor','b', 'MarkerSize',10);
+hold on
+title('\fontsize{20}{Cornell}');
+xlabel('\fontsize{20}{missing ratio}');
+ylabel('\fontsize{20}{alignment}');
+ylim([min(min(aln_sco_mean))-0.005 max(max(aln_sco_mean))+0.002]);
+legend('\fontsize{12}{ZF+MKKM}','\fontsize{12}{MF+MKKM}','\fontsize{12}{KNN+MKKM}','\fontsize{12}{AF+MKKM}',...
+    '\fontsize{12}{proposed(ZF)}','\fontsize{12}{proposed(MF)}','\fontsize{12}{proposed(KNN)}','\fontsize{12}{proposed V2}');

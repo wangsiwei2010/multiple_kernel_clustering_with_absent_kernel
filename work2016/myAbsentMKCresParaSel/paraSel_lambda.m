@@ -1,0 +1,36 @@
+clear
+clc
+warning off;
+
+path = 'D:\myWork\work2015\';
+dataName = 'flower17'; %%%caltech101_numofbasekernel_10; flower17; flower102; psortPos; CCV;
+epsionset = [0.1:0.1:0.1];
+qnorm = 2;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+load([path,'work2016/myAbsentMKCresParaSel/',dataName,'_missingRatio_',num2str(epsionset(1)),'_norm_',...
+    num2str(qnorm),'_clustering_alg8_iter_',num2str(1),'.mat'],'res1','res2','res3','accval8',...
+    'nmival8','purval8','obj8');
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+figure(1);
+plot(obj8,'-rs','LineWidth',2,'MarkerEdgeColor','r','MarkerFaceColor','r','MarkerSize',6)
+hold on;
+title('\fontsize{20}{Flower17}')
+xlabel('\fontsize{20}{Number of iterations}');
+ylabel('\fontsize{20}{Objective Values}');
+grid on;
+axis normal
+
+
+figure(2)
+plot([-15:2:15],nmival8,'-rs','LineWidth',2,'MarkerEdgeColor','r','MarkerFaceColor','r','MarkerSize',6)
+hold on;
+plot([-15:2:15],res1(2)*ones(length([-15:2:15]),1),'-bo','LineWidth',2,'MarkerEdgeColor','b','MarkerFaceColor','b',...
+    'MarkerSize',6)
+hold on;
+title('\fontsize{20}{Flower17}')
+xlabel('\fontsize{20}{2^\lambda}');
+ylabel('\fontsize{20}{NMI}');
+legend('\fontsize{20}{Proposed}','\fontsize{20}{MKKM-IK(ZF)}')
+grid on;
+axis normal

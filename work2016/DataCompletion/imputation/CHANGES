@@ -1,0 +1,61 @@
+13-Aug-09     * Removed display option in call of EIGS in PEIGS.  The
+	        option created an error for a 1x1 input matrix (a bug
+                in Matlab's EIGS).
+
+03-Jul-07     * Corrected a problem in PEIGS with recent Matlab
+                implementations, in which eigenvalues were not
+                necessarily returned in descending order.   
+
+15-Mar-07     * Changed screen output of effective number of variables
+                (peff) in REGEM for TTLS option. REGEM was erroneously
+                writing out an effective number of degrees of
+                freedom, rather than an effective number of variables
+                (=truncation parameter). However, this was of no
+                consequence for the performance of the algorithm. 
+
+		Note that this definition of the effective number of
+                variables is not precise for TTLS. A better definition
+		would be based on the filter factor formulation of
+		Fierro et al. (1997), but obtaining these would
+		involve additional computation, which seems
+		unnecessary for this merely diagnostic output. 
+
+01-Jul-02:    * Users reported problems due to changes in the calling 
+                sequence of EIGS in a beta version of an upcoming Matlab 
+                release. 
+
+08-Feb-02:    * Minor changes in PEIGS and GCVRIDGE to improve downward 
+                compatibility with Matlab 5. Switched to multiple ridge 
+                regressions as default regularized regression method.
+
+02-Jan-01     * Adaptation to Matlab 6 (minor changes in PEIGS). REGEM now 
+                has an additional optional parameter OPTIONS.minvarfrac, 
+                from which an upper bound on the regularization parameter
+                can be constructed. 
+
+04-Apr-00:    * CovRes in REGEM is now a full matrix, no longer a
+                sparse matrix. Not allocating memory at initialization
+                of the sparse matrix had significantly slowed down the
+                algorithm.
+
+22-Mar-00:    * All variables in a dataset are now scaled at the
+                beginning of an EM iteration and regularization in
+                standard form is performed. Before, in each individual 
+                record only the variables with available values were 
+                scaled. Scaling all variables slightly changes the
+                objective of generalized cross-validation: instead of
+                estimating the regularization parameter for which the
+                expected *ms error* of the imputed values is minimum,
+                GCV now estimates the regularization parameter for
+                which the expected *relative ms error* of the imputed
+                values is minimum. REGEM with MRIDGE might thus produce
+                slightly different results; however, REGEM with IRIDGE
+                should produce the same results as before.
+
+14-Oct-10:    * Fixed syntax in REGEM line where it is checked whether a
+                TTLS truncation parameter is given. (Error pointed out
+                by Gavin Schmidt.)
+
+20-Oct-10:    *	Fixed NANSTD. (It previously calculated an incorrect
+                estimate of the standard deviation.) (Error pointed
+                out by Ross Tulloch.)

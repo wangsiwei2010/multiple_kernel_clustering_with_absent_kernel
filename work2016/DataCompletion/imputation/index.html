@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content=
+    "text/html; charset=iso-8859-1">
+    <meta name="KEYWORDS" lang="en-us" content=
+    "missing values, incomplete data, EM algorithm, regularization,
+    ridge regression, historic surface temperatures, climate data">
+    <meta name="DESCRIPTION" content="regularized EM algorithm">
+
+    <title>Analysis of incomplete datasets: Estimation of mean
+    values and covariance matrices and imputation of missing values</title>
+
+    <style>
+
+      body{
+        background-color: #FFFFFF;	
+        color: #333333;
+      }
+  
+      p.ref{  /* for bibliography */
+        margin-left: 4em;
+        text-indent: -2.5em
+      } 
+
+      code{
+        font-family: monospace;
+      }
+
+      p.code{
+        margin-left: 2.5em;
+	text-align: left;
+	font-family: monospace;
+      }
+
+      div.cent{
+        text-align: center
+      }
+
+      h1{
+        text-align: center; 
+      }
+     
+      h2{	
+        text-align: left;
+        margin-top: 2.5ex
+      }
+
+      a:link    {color: #006699; text-decoration: none}
+      a:active  {color: #999933; text-decoration: none}
+      a:visited {color: #006699; text-decoration: none}
+    </style>
+  </head>
+
+  <body>
+  <table border="0" cellspacing="0" cellpadding="0" width=550 align="center">
+  <tr><td>
+    <h1 class="cent">Analysis of incomplete datasets: Estimation
+    of mean values and covariance matrices and imputation of missing
+    values<br></h1>  
+
+    <div class="cent"><font size="-1"> 
+    [<a href="#purpose">Purpose</a>] 
+    &nbsp;&nbsp; 
+    [<a href="#installation">Installation</a>] 
+    &nbsp;&nbsp; 
+    [<a href="#files">Module&nbsp;descriptions</a>]
+    &nbsp;&nbsp; 
+    [<a href="#suggestions">Possible&nbsp;modifications</a>]
+    </font></div>
+
+    <h2><font size="+1"><a name="purpose">Purpose</a></font></h2>
+
+    <p>What follows is a collection of <a href="http://www.mathworks.com/">
+    Matlab</a> modules for</p>
+    <ul>
+      <li>the estimation of mean values and covariance matrices from
+      incomplete datasets, and </li>
+
+      <li>the imputation of missing values in incomplete datasets.</li>
+    </ul>
+
+    <p>The modules implement the regularized EM algorithm described in</p>
+
+    <p class="ref">T. Schneider, 2001: <a href= 
+    "../papers/imputation.pdf">Analysis of incomplete climate data:
+    Estimation of mean values and covariance matrices and imputation
+    of missing values</a>. <cite>Journal of Climate</cite>,
+    <strong>14</strong>, 853&#150;871.</p> 
+
+    <p>The EM algorithm for Gaussian data is based on iterated linear
+    regression analyses. In the regularized EM algorithm, a
+    regularized estimation method replaces the conditional maximum
+    likelihood estimation of regression parameters in the conventional
+    EM algorithm for Gaussian data. The modules here provide truncated
+    total least squares (with fixed truncation parameter) and ridge
+    regression with generalized cross-validation as regularized
+    estimation methods.</p>
+    
+    <p>The implementation of the regularized EM algorithm is modular,
+    so that the modules that perform the regularized estimation of
+    regression parameters (e.g., ridge regression and generalized
+    cross-validation) can be exchanged for other regularization
+    methods and other methods of determining a regularization
+    parameter. Per-Christian Hansen's <a
+    href="http://www.imm.dtu.dk/~pch/Regutools/regutools.html">Regularization
+    Tools</a> contain Matlab modules implementing a collection of
+    regularization methods that can be adapted to fit into the
+    framework of the EM algorithm. The generalized cross-validation
+    modules of the regularized EM algorithm are adapted from Hansen's
+    generalized cross-validation modules.</p>
+
+    <p>In the Matlab implementation of the regularized EM algorithm,
+    more emphasis was placed on the modularity of the program code
+    than on computational efficiency. Below are some <a
+    href="#suggestions">suggestions</a> on how the regularized EM
+    algorithm could be implemented more efficiently.</p>
+
+    <h2><font size="+1"><a name="installation">Installation</a></font></h2>
+
+    <p>The program package consists of several Matlab modules. To
+    install the programs, copy the package (available as a <a href=
+    "imputation.tar.gz">tar.gz-file</a>) into a directory that is
+    accessible by Matlab. Unpack the package using</p> <p
+    class="code"> gunzip imputation.tar.gz<br> tar -xvf imputation.tar
+    </p>
+    <p>Starting Matlab and invoking Matlab's online help function</p>
+    <p class="code"> help <i>filename</i>
+    </p>
+    <p>displays information on the module <code><i>filename</i>.m</code>.</p>
+
+    <h2><font size="+1"><a name="files">Module descriptions</a></font></h2>
+
+    <dl>
+      <dt><a href="CHANGES">CHANGES</a></dt>
+      <dd>Recent significant changes of the programs.</dd>
+
+      <dt><a href="center.m">center.m</a></dt>
+      <dd>Centers data by subtracting the mean.</dd>
+
+      <dt><a href="gcvfctn.m">gcvfctn.m</a>&nbsp;&nbsp;&nbsp;(auxiliary
+           module to gcvridge.m)</dt>
+      <dd>Evaluates generalized cross-validation function.</dd>
+
+      <dt><a href="gcvridge.m">gcvridge.m</a></dt> 
+      <dd>Finds minimum of generalized cross-validation function for
+      ridge regression.</dd>
+
+      <dt><a href="iridge.m">iridge.m</a></dt>
+      <dd>Computes regression parameters by individual ridge regressions.</dd>
+
+      <dt><a href="mridge.m">mridge.m</a></dt>
+      <dd>Computes regression parameters by a multiple ridge regression.</dd>
+
+      <dt><a href="nancov.m">nancov.m</a></dt>
+      <dd>Sample covariance matrix of available values in
+      incomplete dataset.</dd> 
+
+      <dt><a href="nanmean.m">nanmean.m</a></dt>
+      <dd>Sample mean of available values in incomplete dataset.</dd> 
+
+      <dt><a href="nanstd.m">nanstd.m</a></dt>
+      <dd>Standard deviation of available values in
+      incomplete dataset.</dd> 
+
+      <dt><a href="nansum.m">nansum.m</a></dt>
+      <dd>Sum over available values in incomplete dataset.</dd> 
+
+      <dt><a href="peigs.m">peigs.m</a></dt>
+      <dd>Computes positive eigenvalues and corresponding
+      eigenvectors.</dd> 
+
+      <dt><a href="pttls.m">pttls.m</a></dt>
+      <dd>Computes regression parameters by truncated total least squares.</dd> 
+
+      <dt><a href="regem.m">regem.m</a></dt>
+      <dd>Driver module for regularized EM algorithm.</dd>
+
+      <dt><a href="standardize.m">standardize.m</a></dt>
+      <dd>Standardizes data by subtracting the mean and scaling
+      with the standard deviation.</dd>
+    </dl>
+
+    <h2><font size="+1"><a name="suggestions">Possible modifications</a></font></h2>
+
+    <p>More efficient implementations of the regularized EM algorithm
+    are possible. For example, if the missing values in the dataset
+    under consideration follow regular patterns, the algorithm might
+    exploit the special structure of the dataset. Other possible
+    modifications include:</p>
+
+    <ul>
+      <li>One could implement a regularized EM algorithm that exploits
+      spatio-temporal covariability (cf. Section&nbsp;4 of the <a
+      href="../papers/imputation.pdf">above paper</a>).</li>
+
+      <li>One could implement an adaptive method for the choice of
+      truncation parameter if truncated total least squares (TTLS) is
+      used as the regularization method in the regularized EM
+      algorithm. Some criteria for the choice of truncation parameter
+      in TTLS are discussed in Sima and van Huffel (2007), Level
+      choice in truncated total least squares, <em>Comp. Stat. Data
+      Anal.</em> (to appear). These methods require one additional
+      eigendecomposition per record, in addition to the one
+      eigendecomposition per iteration of the total covariance matrix
+      required if TTLS is used.
+
+      <li>One could find matching patterns of missing values in
+      different records and compute a regression for each pattern of
+      missing values instead of for each record.</li>
+
+      <li>One could parallelize the algorithm, so that the
+      computations for several records (or for several patterns of
+      missing values) are carried out simultaneously.</li>
+
+      <li>One could compute only one eigendecomposition per iteration,
+      instead of one eigendecomposition per record (or per pattern of
+      missing values), and compute the ridge regression via a singular
+      value decomposition of a data matrix (cf. Section&nbsp;3 of the
+      <a href="../papers/imputation.pdf">above paper</a>). For
+      datasets with many more variables than records, this procedure
+      might be faster than computing one eigendecomposition per record
+      and iteration.</li>
+    </ul>
+    </td></tr>
+    </table>
+  </body>
+</html>
+
